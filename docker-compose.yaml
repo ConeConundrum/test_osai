@@ -1,0 +1,29 @@
+version: "3.8"
+
+x-logging:
+  &default-logging
+  driver: "json-file"
+  options:
+    max-size: "25m"
+    max-file: '2'
+
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["/bin/bash", "/app/entrypoint.sh"]
+    env_file:
+      - ./.env
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+    logging: *default-logging
+
+  database:
+    image: postgres:13.3
+    env_file:
+      - ./.env
+    logging: *default-logging

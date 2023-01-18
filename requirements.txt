@@ -1,0 +1,10 @@
+alembic
+asyncpg
+fastapi
+uvicorn
+pydantic[dotenv]
+httpx
+
+pytest
+flake8
+bandit

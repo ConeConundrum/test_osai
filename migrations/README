@@ -1,0 +1,7 @@
+###Generic single-database configuration.
+
+####Casual commands:
+- alembic init migrations
+- alembic revision -m "create <name> table"
+- upgrade
+- downgrade
