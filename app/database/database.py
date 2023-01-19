@@ -2,14 +2,10 @@ import asyncio
 
 import asyncpg
 from fastapi import HTTPException, status
-from alembic import command
-from alembic.config import Config
 
 from app.components.http_errors import HttpErrorEnum
 from app.settings.config import config
 from app.settings.logging import logger
-
-alembic_config = Config('alembic.ini')
 
 
 async def initiate_db():
@@ -32,6 +28,8 @@ async def initiate_db():
                 port=config.POSTGRES_PORT,
                 host=config.POSTGRES_SERVER
             )
+            await connection.close()
+            return
         except asyncpg.InvalidCatalogNameError:
             logger.warning(
                 f'Database {config.POSTGRES_DB} does not exist. '
@@ -57,14 +55,6 @@ async def initiate_db():
         except Exception as e:
             logger.error('Connection error', e)
         await asyncio.sleep(1)
-
-
-def make_migrations():
-    command.upgrade(alembic_config, 'head')
-
-
-def clear_db():
-    command.downgrade(alembic_config, 'base')
 
 
 async def get_connection_pool():

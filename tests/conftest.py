@@ -9,8 +9,9 @@ from fastapi.testclient import TestClient
 from pydantic import HttpUrl, parse_obj_as
 
 from app.database.crud_operations import create_url_db
-from app.database.database import initiate_db, make_migrations, clear_db, get_connection_pool
+from app.database.database import initiate_db, get_connection_pool
 from app.components.generate_url import generate_key, generate_short_url
+from app.migrations.migrations import make_migrations, clear_db
 
 faker = Faker()
 

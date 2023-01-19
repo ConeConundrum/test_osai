@@ -1,12 +1,8 @@
 from __future__ import with_statement
 
-import sys
-import os
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from app.settings.config import config as service_config  # noqa
 
