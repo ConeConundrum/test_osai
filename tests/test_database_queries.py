@@ -33,12 +33,12 @@ def test_create_url_db_conflict(db_pool, create_url_record_db):
 
 
 def test_get_url_db_ok(db_pool, create_url_record_db):
-    original_url, _, short_url, __ = create_url_record_db
+    original_url, key, _, __ = create_url_record_db
 
     record = asyncio.get_event_loop().run_until_complete(
         get_short_url_db(
             db=db_pool,
-            short_url=short_url
+            key=key
         )
     )
 
@@ -47,12 +47,12 @@ def test_get_url_db_ok(db_pool, create_url_record_db):
 
 
 def test_get_url_no_record(db_pool, create_url_record_data):
-    _, __, short_url = create_url_record_data
+    _, key, _ = create_url_record_data
 
     record = asyncio.get_event_loop().run_until_complete(
         get_short_url_db(
             db=db_pool,
-            short_url=short_url
+            key=key
         )
     )
 
@@ -60,12 +60,12 @@ def test_get_url_no_record(db_pool, create_url_record_data):
 
 
 def test_delete_url_db_ok(db_pool, create_url_record_db):
-    original_url, _, short_url, __ = create_url_record_db
+    original_url, key, _, __ = create_url_record_db
 
     record = asyncio.get_event_loop().run_until_complete(
         delete_url_db(
             db=db_pool,
-            short_url=short_url
+            key=key
         )
     )
 
@@ -74,12 +74,12 @@ def test_delete_url_db_ok(db_pool, create_url_record_db):
 
 
 def test_delete_url_no_record(db_pool, create_url_record_data):
-    _, __, short_url = create_url_record_data
+    _, key, __ = create_url_record_data
 
     record = asyncio.get_event_loop().run_until_complete(
         get_short_url_db(
             db=db_pool,
-            short_url=short_url
+            key=key
         )
     )
 

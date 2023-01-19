@@ -1,6 +1,8 @@
 import asyncio
 
-from app.components.generate_url import generate_short_url, generate_key, check_collision
+import pytest
+
+from app.components.generate_url import generate_short_url, generate_key, check_collision, get_key_from_short_url
 
 
 def test_check_collision_positive_collision(db_pool, create_url_record_db):
@@ -31,3 +33,17 @@ def test_generate_key_positive(db_pool, create_url_record_data):
 
 def test_generate_short_url_positive(create_url):
     assert generate_short_url(original_url=create_url, key='key')
+
+
+@pytest.mark.parametrize(
+    'url, ret',
+    [
+        ['test.ru', None],
+        ['test.ru/', ''],
+        ['test.ru/fs', 'fs'],
+        ['', None],
+        [None, None]
+    ]
+)
+def test_split_or_none(url, ret):
+    assert get_key_from_short_url(short_url=url) == ret  # noqa ?

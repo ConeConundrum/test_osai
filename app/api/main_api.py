@@ -1,8 +1,8 @@
 from fastapi import APIRouter, status, Request, HTTPException
 from pydantic import HttpUrl
 
-from app.components.generate_url import generate_short_url, generate_key
 from app.components.http_errors import HttpErrorEnum
+from app.components.generate_url import generate_short_url, generate_key, get_key_from_short_url
 from app.database.crud_operations import get_short_url_db, create_url_db, delete_url_db, get_full_url_db
 
 api_router = APIRouter()
@@ -40,7 +40,13 @@ async def create_short_link(request: Request, original_url: HttpUrl) -> str:
 async def get_short_link(request: Request, short_url: str) -> HttpUrl:
     """Get short link based on full link"""
     db = request.app.state.db
-    url_data = await get_short_url_db(db=db, short_url=short_url)
+
+    # get key to get data by indexed column
+    key = get_key_from_short_url(short_url=short_url)
+    if not key:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, HttpErrorEnum.BAD_URL_422)
+
+    url_data = await get_short_url_db(db=db, key=key)
     if not url_data:
         raise HTTPException(status.HTTP_404_NOT_FOUND, HttpErrorEnum.URL_NOT_FOUND_404)
     return url_data
@@ -50,7 +56,12 @@ async def get_short_link(request: Request, short_url: str) -> HttpUrl:
 async def delete_short_link(request: Request, short_url: str) -> str:
     """Delete short link"""
     db = request.app.state.db
-    original_url = await delete_url_db(db=db, short_url=short_url)
+    # get key to get data by indexed column
+    key = get_key_from_short_url(short_url=short_url)
+    if not key:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, HttpErrorEnum.BAD_URL_422)
+
+    original_url = await delete_url_db(db=db, key=key)
     if not original_url:
         raise HTTPException(status.HTTP_404_NOT_FOUND, HttpErrorEnum.URL_NOT_FOUND_404)
     return 'OK'

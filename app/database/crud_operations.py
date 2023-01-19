@@ -20,14 +20,14 @@ async def create_url_db(db: Pool, original_url: HttpUrl, short_url: str, generat
         )
 
 
-async def get_short_url_db(db: Pool, short_url: str) -> HttpUrl:
+async def get_short_url_db(db: Pool, key: str) -> HttpUrl:
     async with db.acquire() as connection:
         return await connection.fetchval(
             """
             SELECT original_url FROM url
-            WHERE short_url = $1
+            WHERE key = $1
             """,
-            short_url
+            key
         )
 
 
@@ -53,13 +53,13 @@ async def get_key_db(db: Pool, key: str) -> str:
         )
 
 
-async def delete_url_db(db: Pool, short_url: str) -> None:
+async def delete_url_db(db: Pool, key: str) -> None:
     async with db.acquire() as connection:
         return await connection.fetchval(
             """
             DELETE FROM url
-            WHERE short_url = $1
+            WHERE key = $1
             RETURNING original_url
             """,
-            short_url
+            key
         )

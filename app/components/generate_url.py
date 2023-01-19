@@ -39,3 +39,11 @@ async def generate_key(db: Pool, original_url: HttpUrl, salt: Optional[str] = No
 def generate_short_url(original_url: HttpUrl, key: str) -> str:
     short_url = ''.join([original_url.host, '/', key])
     return short_url
+
+
+def get_key_from_short_url(short_url: str) -> Optional[str]:
+    try:
+        key = short_url.split('/')[1]
+        return key
+    except (IndexError, AttributeError):
+        return None

@@ -24,7 +24,9 @@ def upgrade():
         sa.Column('short_url', sa.String(length=255), unique=True, nullable=False),
         sa.Column('key', sa.String(length=36), unique=True, nullable=False)
     )
+    op.create_index('key_index', table_name='url', columns=['key'], unique=True)
 
 
 def downgrade():
+    op.drop_index('key_index', table_name='url')
     op.drop_table('url')

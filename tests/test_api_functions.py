@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from fastapi import status
 
@@ -19,6 +21,8 @@ def test_post_url_api_201(client, url):
     assert result.status_code == status.HTTP_201_CREATED
     assert result.json()
     assert isinstance(result.json(), str)
+    pattern = re.compile(r"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)") # noqa
+    assert pattern.match(result.json())
 
 
 @pytest.mark.parametrize(
