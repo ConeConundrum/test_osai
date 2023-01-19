@@ -24,13 +24,13 @@ async def generate_key(db: Pool, original_url: HttpUrl, salt: Optional[str] = No
     while not key and retry_counter > 0:
         hashable_string = original_url.encode('utf-8') if not salt else ''.join([original_url, salt]).encode('utf-8')
 
-        # hashing, make url safe and get only 8 chars from hash
+        # hashing, make url safe and get MAX_KEY_LENGTH chars from hash
         key_bytes: bytes = hashlib.md5(hashable_string).digest()  # nosec just hashing to get random string
         key: str = base64.urlsafe_b64encode(key_bytes).decode('ascii')[:config.MAX_KEY_LENGTH]
 
         # check for collision and add salt from random
         if await check_collision(db=db, key=key):
-            salt = str(random.randint(1, 1000000))
+            salt = str(random.randint(1, 1000000))  # nosec just random salt num
         retry_counter -= 1
 
     return key
