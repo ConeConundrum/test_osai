@@ -5,13 +5,10 @@ import os
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
-from sqlalchemy.ext.declarative import declarative_base
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from app.settings.config import config as service_config  # noqa
-
-Base = declarative_base()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

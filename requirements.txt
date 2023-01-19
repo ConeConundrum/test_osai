@@ -4,7 +4,9 @@ fastapi
 uvicorn
 pydantic[dotenv]
 httpx
+psycopg2
 
 pytest
+Faker
 flake8
 bandit

@@ -1,4 +1,4 @@
-FROM python:3.10.9 as pip-installed
+FROM python:3.8.16 as pip-installed
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/
